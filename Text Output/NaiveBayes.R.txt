@@ -1,0 +1,72 @@
+> # Load required libraries
+> library(klaR)
+
+> library(caret)
+
+> script_directory <- dirname(rstudioapi::getActiveDocumentContext()$path)
+
+> setwd(script_directory)
+
+> # Load your data (replace "your_file_path.csv" with the actual path to your CSV file)
+> house <- read.csv("house_data.csv")
+
+> # Assuming you want to create four pricing categories: Low, Medium, High, Very High
+> # You may need to adjust the breaks based on your data distrib .... [TRUNCATED] 
+
+> # Convert date variable to Date
+> house$date <- as.Date(house$date, format = "%Y%m%dT%H%M%S")
+
+> # Convert the 'price_category' column to a factor
+> house$price_category <- as.factor(house$price_category)
+
+> # Set a seed for reproducibility
+> set.seed(123)
+
+> # Split the data into training and testing sets (80% training, 20% testing)
+> splitIndex <- createDataPartition(house$price_category, p = 0.80, list .... [TRUNCATED] 
+
+> train_data <- house[splitIndex, ]
+
+> test_data <- house[-splitIndex, ]
+
+> # Build the Naive Bayes model using the NaiveBayes function with laplace smoothing
+> nb_model <- NaiveBayes(price_category ~ bedrooms + bathrooms +  .... [TRUNCATED] 
+
+> # Make predictions on the test data
+> 
+> predictions <- predict(nb_model, newdata = test_data)
+
+> tab_nb <- table(predictions$class, test_data$price_category)
+
+> caret::confusionMatrix(tab_nb)  
+Confusion Matrix and Statistics
+
+           
+            Low Medium High Very High
+  Low       887    642  429       121
+  Medium    117    205  206        48
+  High       63    183  295       283
+  Very High  13     62  145       622
+
+Overall Statistics
+                                        
+               Accuracy : 0.4649        
+                 95% CI : (0.45, 0.4799)
+    No Information Rate : 0.2527        
+    P-Value [Acc > NIR] : < 2.2e-16     
+                                        
+                  Kappa : 0.2868        
+                                        
+ Mcnemar's Test P-Value : < 2.2e-16     
+
+Statistics by Class:
+
+                     Class: Low Class: Medium Class: High Class: Very High
+Sensitivity              0.8213       0.18773     0.27442           0.5791
+Specificity              0.6322       0.88510     0.83703           0.9322
+Pos Pred Value           0.4266       0.35590     0.35801           0.7387
+Neg Pred Value           0.9139       0.76315     0.77695           0.8701
+Prevalence               0.2499       0.25272     0.24879           0.2486
+Detection Rate           0.2053       0.04744     0.06827           0.1439
+Detection Prevalence     0.4811       0.13330     0.19070           0.1949
+Balanced Accuracy        0.7268       0.53642     0.55572           0.7557

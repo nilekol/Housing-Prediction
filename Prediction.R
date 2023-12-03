@@ -3,11 +3,8 @@ library(caret)
 script_directory <- dirname(rstudioapi::getActiveDocumentContext()$path)
 setwd(script_directory)
 
-# Load your data (replace "your_file_path.csv" with the actual path to your CSV file)
 house <- read.csv("house_data.csv")
 
-# Assuming you want to create four pricing categories: Low, Medium, High, Very High
-# You may need to adjust the breaks based on your data distribution
 house$price_category <- cut(house$price,
                             breaks = c(-Inf, quantile(house$price, 0.25),
                                        quantile(house$price, 0.5),
@@ -43,8 +40,6 @@ tuneGrid <- expand.grid(cp = complexity_values)
 # Specify the new response variable (price_category) in the formula
 fit.cv <- train(price_category ~ ., data = house.trn[, c(features, "price_category")], method = "rpart",
                 trControl = ctrl, tuneGrid = tuneGrid)
-
-# ... (rest of the code remains unchanged)
 
 # Predict on the test set
 pred <- predict(fit.cv, house.tst[, features])
