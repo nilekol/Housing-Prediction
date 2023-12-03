@@ -27,7 +27,9 @@ house.trn <- house[training_data, ]
 house.tst <- house[-training_data, ]
 
 # Specify the features (independent variables) you want to use for classification
-features <- c("bedrooms", "bathrooms", "sqft_living", "sqft_lot", "floors", "waterfront", "view", "condition", "grade", "sqft_above", "sqft_basement", "yr_built", "yr_renovated")
+
+#features <- c("bedrooms","bathrooms","bedrooms",)
+features <- c("bedrooms", "bathrooms", "sqft_living", "sqft_lot", "floors", "waterfront", "view", "condition", "grade", "sqft_above", "sqft_basement", "yr_built", "yr_renovated", "sqft_living15", "sqft_lot15", "lat", "long")
 
 ctrl <- trainControl(method = "cv", number = 10)
 
@@ -52,8 +54,9 @@ confusionMatrix(table(house.tst$price_category, pred))
 
 par(mfrow = c(1, 2), cex = 0.7)
 par(mfrow = c(1, 1), cex = 0.7, mar = c(5, 10, 4, 2) + 0.1)
-
+#plot(fit, uniform=TRUE,margin=0.2)
+#text(fit, use.n=TRUE, all=TRUE, cex=.8)
 print(fit.cv)
 plot(fit.cv)
-plot(fit.cv$finalModel)
-text(fit.cv$finalModel)
+plot(fit.cv$finalModel, uniform=TRUE, margin = 0.2)
+text(fit.cv$finalModel, cex = .8)
